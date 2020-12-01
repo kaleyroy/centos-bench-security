@@ -10,6 +10,7 @@ check_2() {
   test_wrapper 0 "2.1.5   - Ensure time services are not enabled (Scored)" test_dgram_stream_services_disabled time
   test_wrapper 0 "2.1.6   - Ensure tftp server is not enabled (Scored)" test_service_disable tftp
   test_wrapper 0 "2.1.7   - Ensure xinetd is not enabled (Scored)" test_service_disable xinetd
+  test_wrapper 0 "2.1.8   - Ensure rsyncd is not enabled (Scored)" test_service_disable rsyncd
   info "2.2     - Special Purpose Services"
   info "2.2.1   - Time Synchronization"
   test_wrapper 0 "2.2.1.1 - Ensure time synchronization is in use (Not Scored)" test_time_sync_services_enabled

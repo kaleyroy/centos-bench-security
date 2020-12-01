@@ -32,6 +32,9 @@ main () {
 # Björn Oscarsson (c) 2017-
 #
 # Inspired by the Docker Bench for Security.
+# 
+# Forked from https://github.com/hzde0128/centos-bench-security
+# Modified by kaleyroy@gmail.com for private environment (CentOS7.x ONLY)
 # ------------------------------------------------------------------------------"
   logit "Initializing $(date)"
 
