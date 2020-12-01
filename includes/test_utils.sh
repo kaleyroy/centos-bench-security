@@ -74,7 +74,7 @@ test_separate_partition() {
 test_mount_option() {
   local target="${1}"
   local mnt_option="${2}"
-  if [ "${target}" = "/dev/shm" ]; then
+  if [ "${target}" = "/dev/shm" ] || [ "${target}" = "/home" ]; then
     mount -o remount,${mnt_option} ${target}
   else
     findmnt -nlo options ${target} | grep -q "${mnt_option}" || return
