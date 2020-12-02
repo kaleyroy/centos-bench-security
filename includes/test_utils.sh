@@ -90,6 +90,9 @@ test_sticky_wrld_w_dirs() {
   local dirs="$(df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \))"
   [[ -z "${dirs}" ]] || return
 }
+fix_sticky_wrld_w_dirs(){
+  df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+t || return
+}
 
 test_wrld_writable_files() {
   local dirs="$(df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type f -perm -0002)"
@@ -772,8 +775,12 @@ fix_wrapper(){
       fix_service_disable "${args}" 
     ;;
     "test_service_enabled")
-      note "[FIXING] -> ${msg}"
+      note "[FIXING] -> ${msg} ..." 
       fix_service_enabled "${args}"
+    ;;
+    "test_sticky_wrld_w_dirs")
+      note "[FIXING] -> ${msg} ..." 
+      fix_sticky_wrld_w_dirs
     ;;
   esac
 }
