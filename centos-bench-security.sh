@@ -22,8 +22,6 @@ func_wrapper() {
   fi
 }
 
-main () {  
-  yell "# ------------------------------------------------------------------------------
 # CentOS Bench for Security 
 # 
 # Based on 'CIS_CentOS_Linux_7_Benchmark_v2.2.0 (12-27-2017)'
@@ -35,6 +33,14 @@ main () {
 # 
 # Forked from https://github.com/hzde0128/centos-bench-security
 # Modified by kaleyroy@gmail.com for private environment (CentOS7.x ONLY)
+# ------------------------------------------------------------------------------"
+
+main () {  
+  yell "# ------------------------------------------------------------------------------
+#
+# CentOS Bench for Security (v-1.0)
+# provided by aZaaS <https://www.azaas.com>
+# 
 # ------------------------------------------------------------------------------"
   logit "Initializing $(date)"
 
