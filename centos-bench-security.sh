@@ -33,7 +33,6 @@ func_wrapper() {
 # 
 # Forked from https://github.com/hzde0128/centos-bench-security
 # Modified by kaleyroy@gmail.com for private environment (CentOS7.x ONLY)
-# ------------------------------------------------------------------------------"
 
 main () {  
   yell "# ------------------------------------------------------------------------------

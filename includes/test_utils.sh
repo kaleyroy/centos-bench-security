@@ -162,7 +162,7 @@ test_rpm_not_installed() {
 }
 fix_rpm_not_installed() {
   local rpm="${1}"
-  yum remove "$rpm" 2> /dev/null || return
+  yum remove "$rpm" -y 2> /dev/null || return
 }
 
 test_aide_cron() {
@@ -367,6 +367,10 @@ test_ipv6_disabled() {
 test_tcp_wrappers_installed() {
   test_rpm_installed tcp_wrappers
   test_rpm_installed tcp_wrappers-libs
+}
+fix_tcp_wrappers_installed(){
+  fix_rpm_installed tcp_wrappers
+  fix_rpm_installed tcp_wrappers-libs
 }
 
 test_hosts_deny_content() {
@@ -797,6 +801,10 @@ fix_wrapper(){
     "test_rpm_not_installed")
       note "[FIXING(yum remove)] -> ${msg} ..."
       fix_rpm_not_installed "${args}"
+    ;;
+    "test_tcp_wrappers_installed")
+      note "[FIXING(yum install)] -> ${msg} ..."
+      fix_tcp_wrappers_installed
     ;;
   esac
 }
