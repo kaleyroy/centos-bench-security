@@ -382,6 +382,11 @@ test_firewall_policy() {
   iptables -L | egrep -q "Chain[[:space:]]+FORWARD[[:space:]]+" | egrep -q "policy[[:space:]]+DROP" || return
   iptables -L | egrep -q "Chain[[:space:]]+OUTPUT[[:space:]]+" | egrep -q "policy[[:space:]]+DROP" || return
 }
+fix_firewall_policy(){
+  iptables -P INPUT DROP
+  iptables -P OUTPUT DROP
+  iptables -P FORWARD DROP
+}
 
 test_loopback_traffic_conf() {
   local accept="ACCEPT[[:space:]]+all[[:space:]]+--[[:space:]]+lo[[:space:]]+\*[[:space:]]+0\.0\.0\.0\/0[[:space:]]+0\.0\.0\.0\/0"
@@ -805,6 +810,10 @@ fix_wrapper(){
     "test_tcp_wrappers_installed")
       note "[FIXING(yum install)] -> ${msg} ..."
       fix_tcp_wrappers_installed
+    ;;
+    "test_firewall_policy")
+      note "[FIXING(use default)] -> ${msg} ..."
+      fix_firewall_policy
     ;;
   esac
 }
