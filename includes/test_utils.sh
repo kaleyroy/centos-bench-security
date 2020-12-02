@@ -120,10 +120,18 @@ test_service_disable() {
   local service="$1" 
   systemctl is-enabled "${service}" 2>&1 | egrep -q 'disabled|Failed|indirect' || return
 }
+fix_service_disable() {
+  local service="$1"
+  systemctl stop "${service}" 2> /dev/null && systemctl disable "${service}" 2> /dev/null || return
+}
 
 test_service_enabled() {
   local service="$1" 
   systemctl is-enabled "${service}" 2>&1 | grep -q 'enabled' || return
+}
+fix_service_enabled() {
+  local service="$1"
+  systemctl enable "${service}" 2> /dev/null && systemctl start "${service}" 2> /dev/null || return
 }
 
 test_yum_gpgcheck() {
@@ -751,6 +759,25 @@ test_ssh_access() {
   [[ -n "${deny_groups}" ]] || return
 }
 
+fix_wrapper(){
+  local msg=$1
+  shift
+  local func=$1
+  shift
+  local args=$@
+
+  case "${func}" in
+    "test_service_disable")
+      note "[FIXING] -> ${msg} ..."      
+      fix_service_disable "${args}" 
+    ;;
+    "test_service_enabled")
+      note "[FIXING] -> ${msg}"
+      fix_service_enabled "${args}"
+    ;;
+  esac
+}
+
 test_wrapper() {
   local do_skip=$1
   shift
@@ -765,6 +792,7 @@ test_wrapper() {
       pass "${msg}"
     else
       warn "${msg}"
+      fix_wrapper "${msg}" "${func}" "${args}"
     fi
   else
     skip "${msg}"
