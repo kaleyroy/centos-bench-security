@@ -395,6 +395,11 @@ test_loopback_traffic_conf() {
   iptables -L INPUT -v -n | egrep -q ${drop} || return
   iptables -L OUTPUT -v -n | egrep -q ${accept} || return
 }
+fix_loopback_traffic_conf(){
+  iptables -A INPUT -i lo -j ACCEPT 
+  iptables -A OUTPUT -o lo -j ACCEPT 
+  iptables -A INPUT -s 127.0.0.0/8 -j DROP
+}
 
 test_wireless_if_disabled() {
   for i in $(iwconfig 2>&1 | egrep -v "no[[:space:]]*wireless" | cut -d' ' -f1); do
@@ -814,6 +819,10 @@ fix_wrapper(){
     "test_firewall_policy")
       note "[FIXING(use default)] -> ${msg} ..."
       fix_firewall_policy
+    ;;
+    "test_loopback_traffic_conf")
+      note "[FIXING(lookback rule)] -> ${msg} ..."
+      fix_loopback_traffic_conf
     ;;
   esac
 }
