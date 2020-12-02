@@ -816,14 +816,14 @@ fix_wrapper(){
       note "[FIXING(yum install)] -> ${msg} ..."
       fix_tcp_wrappers_installed
     ;;
-    "test_firewall_policy")
-      note "[FIXING(use default)] -> ${msg} ..."
-      fix_firewall_policy
-    ;;
-    "test_loopback_traffic_conf")
-      note "[FIXING(lookback rule)] -> ${msg} ..."
-      fix_loopback_traffic_conf
-    ;;
+    # "test_firewall_policy")
+    #   note "[FIXING(use default)] -> ${msg} ..."
+    #   fix_firewall_policy
+    # ;;
+    # "test_loopback_traffic_conf")
+    #   note "[FIXING(lookback rule)] -> ${msg} ..."
+    #   fix_loopback_traffic_conf
+    # ;;
   esac
 }
 
