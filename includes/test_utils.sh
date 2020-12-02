@@ -151,10 +151,18 @@ test_rpm_installed() {
   fi
   rpm -q ${rpm} | grep -qe "^${rpm}" || return
 }
+fix_rpm_installed() {
+  local rpm="${1}"
+  yum install "$rpm" -y  2> /dev/null || return
+}
 
 test_rpm_not_installed() {
   local rpm="${1}"
   rpm -q ${rpm} | grep -q "not installed" || return
+}
+fix_rpm_not_installed() {
+  local rpm="${1}"
+  yum remove "$rpm" 2> /dev/null || return
 }
 
 test_aide_cron() {
@@ -771,16 +779,24 @@ fix_wrapper(){
 
   case "${func}" in
     "test_service_disable")
-      note "[FIXING] -> ${msg} ..."      
+      note "[FIXING(disable)] -> ${msg} ..."      
       fix_service_disable "${args}" 
     ;;
     "test_service_enabled")
-      note "[FIXING] -> ${msg} ..." 
+      note "[FIXING(enable)] -> ${msg} ..." 
       fix_service_enabled "${args}"
     ;;
     "test_sticky_wrld_w_dirs")
-      note "[FIXING] -> ${msg} ..." 
+      note "[FIXING(chmod a+t)] -> ${msg} ..." 
       fix_sticky_wrld_w_dirs
+    ;;
+    "test_rpm_installed")
+      note "[FIXING(yum install)] -> ${msg} ..."
+      fix_rpm_installed "${args}"
+    ;;
+    "test_rpm_not_installed")
+      note "[FIXING(yum remove)] -> ${msg} ..."
+      fix_rpm_not_installed "${args}"
     ;;
   esac
 }
