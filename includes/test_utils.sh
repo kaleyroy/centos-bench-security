@@ -696,8 +696,8 @@ test_pam_pwquality() {
 }
 fix_pam_pwquality(){
   cp ${PWQUAL_CNF} ${PWQUAL_CNF}.bak
-  for item in "minlen=14" "dcredit=-1" "ucredit=-1" "ocredit=-1" "lcredit=-1"
-  do
+  props=("minlen = 14" "dcredit = -1" "ucredit = -1" "ocredit = -1" "lcredit = -1")
+  for item in "${props[@]}"; do
     egrep "${item}" ${PWQUAL_CNF} || echo "${item}" >> ${PWQUAL_CNF}
   done 
 }
