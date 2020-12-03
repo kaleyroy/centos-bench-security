@@ -719,6 +719,7 @@ fix_failed_password_attempts(){
   for target in "${targets[@]}"; do
     for option in "${options[@]}"; do
       egrep "${option}" "${target}" || echo "${option}" >> "${target}"
+    done
   done 
 }
 
@@ -762,6 +763,9 @@ test_password_expiration_warn() {
 
 test_password_lock() {
   [[ $(useradd -D | grep INACTIVE | awk -F'=' '{print $2}') -le 30 ]] && [[ $(useradd -D | grep INACTIVE | awk -F'=' '{print $2}') -ne -1 ]] || return
+}
+fix_password_lock(){
+  useradd -D -f 30 || return
 }
 
 test_password_empty() {
@@ -867,6 +871,10 @@ fix_wrapper(){
     "test_password_history")
       note "[FIXING(use default)] -> ${msg} ..."
       fix_password_history
+    ;;
+    "test_password_lock")
+      note "[FIXING(lock = 30)] -> ${msg} ..."
+      fix_password_lock
     ;;
   esac
 }
