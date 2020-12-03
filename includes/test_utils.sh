@@ -774,6 +774,11 @@ test_user_umask_027(){
   grep "^umask" ${PROFILE}  || echo "umask 027" >> ${PROFILE} || return
 }
 
+test_shell_timeout_900(){
+  grep "^TMOUT" ${BASHRC} || echo "TMOUT=900" >> ${BASHRC} || return
+  grep "^TMOUT" ${PROFILE} || echo "TMOUT=900" >> ${PROFILE} || return
+}
+
 test_password_empty() {
   [[ $(awk -F':' '($2 == "") {print $1}' /etc/passwd)X == 'X' ]] || return
 }
