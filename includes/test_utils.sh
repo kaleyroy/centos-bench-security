@@ -702,6 +702,18 @@ fix_pam_pwquality(){
   done 
 }
 
+test_failed_password_attempts() {
+  egrep '^auth\s+required\s+pam_faillock.so\s+preauth' ${PASS_AUTH} | egrep -q 'unlock_time=900' || return
+  egrep '^auth\s+\[success=1 default=bad\]\s+pam_unix.so' ${PASS_AUTH} || return
+  egrep '^auth\s+\[default=die\]\s+pam_faillock.so\s+authfail' ${PASS_AUTH} | egrep -q 'unlock_time=900' || return
+  egrep '^auth\s+sufficient\s+pam_faillock.so\s+authsucc' ${PASS_AUTH} | egrep -q 'unlock_time=900' || return
+
+  egrep '^auth\s+required\s+pam_faillock.so\s+preauth' ${SYSTEM_AUTH} | egrep -q 'unlock_time=900' || return
+  egrep '^auth\s+\[success=1 default=bad\]\s+pam_unix.so' ${SYSTEM_AUTH} || return
+  egrep '^auth\s+\[default=die\]\s+pam_faillock.so\s+authfail' ${SYSTEM_AUTH} | egrep -q 'unlock_time=900' || return
+  egrep '^auth\s+sufficient\s+pam_faillock.so\s+authsucc' ${SYSTEM_AUTH} | egrep -q 'unlock_time=900' || return  
+}
+
 test_password_history() {
   egrep '^password\s+sufficient\s+pam_unix.so' ${PASS_AUTH} | egrep -q 'remember=' || return
   [[ $(egrep  -o "remember=[[:digit:]]+" ${PASS_AUTH} | awk -F'=' '{print $2}') -ge 5 ]] || return
