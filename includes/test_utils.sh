@@ -708,6 +708,11 @@ test_password_history() {
   egrep '^password\s+sufficient\s+pam_unix.so' ${SYSTEM_AUTH} | egrep -q 'remember=' || return
   [[ $(egrep  -o "remember=[[:digit:]]+" ${SYSTEM_AUTH} | awk -F'=' '{print $2}') -ge 5 ]] || return
 }
+fix_password_history(){
+  option="password sufficient pam_unix.so remember=5"
+  egrep "${option}" ${PASS_AUTH} || echo "${option}" >> ${PASS_AUTH}
+  egrep "${option}" ${SYSTEM_AUTH} || echo "${option}" >> ${SYSTEM_AUTH}
+}
 
 test_password_algorithm() {
   egrep '^password\s+sufficient\s+pam_unix.so' ${PASS_AUTH} | egrep -q sha512 || return
@@ -834,6 +839,10 @@ fix_wrapper(){
     "test_pam_pwquality")
       note "[FIXING(use default)] -> ${msg} ..."
       fix_pam_pwquality
+    ;;
+    "test_password_history")
+      note "[FIXING(use default)] -> ${msg} ..."
+      fix_password_history
     ;;
   esac
 }
