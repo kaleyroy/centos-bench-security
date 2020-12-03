@@ -41,7 +41,7 @@ check_5() {
   todo "5.4.1.5 - Ensure all user last password change date is in the past (Scored)"
   test_wrapper 0 "5.4.2   - Ensure system accounts are non-login (Scored)" test_system_account
   test_wrapper 0 "5.4.3   - Ensure default group for the root account is GID 0 (Scored)" test_root_group_id
-  todo "5.4.4   - Ensure default user umask is 027 or more restrictive (Scored)"
+  test_wrapper 0 "5.4.4   - Ensure default user umask is 027 or more restrictive (Scored)" test_user_umask_027
   todo "5.5     - Ensure root login is restricted to system console (Not Scored)"
   todo "5.6     - Ensure access to the su command is restricted (Scored)"
 }

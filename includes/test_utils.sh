@@ -43,6 +43,7 @@ PASSWD='/etc/passwd'
 SHADOW='/etc/shadow'
 GSHADOW='/etc/gshadow'
 BASHRC='/etc/bashrc'
+PROFILE='/etc/profile'
 PROF_D='/etc/profile.d'
 MOTD='/etc/motd'
 ISSUE='/etc/issue'
@@ -766,6 +767,11 @@ test_password_lock() {
 }
 fix_password_lock(){
   useradd -D -f 30 || return
+}
+
+test_user_umask_027(){
+  grep "^umask" ${BASHRC} || echo "umask 027" >> ${BASHRC} || return
+  grep "^umask" ${PROFILE}  || echo "umask 027" >> ${PROFILE} || return
 }
 
 test_password_empty() {
