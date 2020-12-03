@@ -694,6 +694,13 @@ test_pam_pwquality() {
   egrep -q "^ocredit[[:space:]]+=[[:space:]]+-1" ${PWQUAL_CNF} || return
   egrep -q "^lcredit[[:space:]]+=[[:space:]]+-1" ${PWQUAL_CNF} || return
 }
+fix_pam_pwquality(){
+  cp ${PWQUAL_CNF} ${PWQUAL_CNF}.bak
+  for item in "minlen=14" "dcredit=-1" "ucredit=-1" "ocredit=-1" "lcredit=-1"
+  do
+    egrep "${item}" ${PWQUAL_CNF} || echo "${item}" >> ${PWQUAL_CNF}
+  done 
+}
 
 test_password_history() {
   egrep '^password\s+sufficient\s+pam_unix.so' ${PASS_AUTH} | egrep -q 'remember=' || return
@@ -824,6 +831,10 @@ fix_wrapper(){
     #   note "[FIXING(lookback rule)] -> ${msg} ..."
     #   fix_loopback_traffic_conf
     # ;;
+    "test_pam_pwquality")
+      note "[FIXING(use default)] -> ${msg} ..."
+      fix_pam_pwquality
+    ;;
   esac
 }
 

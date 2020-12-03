@@ -37,7 +37,7 @@ func_wrapper() {
 main () {  
   yell "# ------------------------------------------------------------------------------
 #
-# CentOS Bench for Security (v-1.0)
+# CentOS Bench for Security (v1.0)
 # provided by aZaaS <https://www.azaas.com>
 # 
 # ------------------------------------------------------------------------------"
