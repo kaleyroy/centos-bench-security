@@ -713,6 +713,14 @@ test_failed_password_attempts() {
   egrep '^auth\s+\[default=die\]\s+pam_faillock.so\s+authfail' ${SYSTEM_AUTH} | egrep -q 'unlock_time=900' || return
   egrep '^auth\s+sufficient\s+pam_faillock.so\s+authsucc' ${SYSTEM_AUTH} | egrep -q 'unlock_time=900' || return  
 }
+fix_failed_password_attempts(){
+  targets=("${PASS_AUTH}" "${SYSTEM_AUTH}")
+  options=("auth required pam_faillock.so preauth audit silent deny=5 unlock_time=900" "auth [success=1 default=bad] pam_unix.so" "auth [default=die] pam_faillock.so authfail audit deny=5 unlock_time=900" "auth sufficient pam_faillock.so authsucc audit deny=5 unlock_time=900")
+  for target in "${targets[@]}"; do
+    for option in "${options[@]}"; do
+      egrep "${option}" "${target}" || echo "${option}" >> "${target}"
+  done 
+}
 
 test_password_history() {
   egrep '^password\s+sufficient\s+pam_unix.so' ${PASS_AUTH} | egrep -q 'remember=' || return
@@ -851,6 +859,10 @@ fix_wrapper(){
     "test_pam_pwquality")
       note "[FIXING(use default)] -> ${msg} ..."
       fix_pam_pwquality
+    ;;
+    "test_failed_password_attempts")
+      note "[FIXING(use default)] -> ${msg} ..."
+      fix_failed_password_attempts
     ;;
     "test_password_history")
       note "[FIXING(use default)] -> ${msg} ..."
