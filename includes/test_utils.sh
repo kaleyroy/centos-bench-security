@@ -686,6 +686,10 @@ test_at_cron_auth_users() {
   test_permissions_0600_root_root "${AT_ALLOW}" || return
 }
 
+test_mac_algorithms_used(){
+  grep "MACs" ${SSHD_CFG} || echo "MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com" >> ${SSHD_CFG} || return
+}
+
 test_pam_pwquality() {
   egrep pam_pwquality.so ${PASS_AUTH} | egrep try_first_pass | egrep -q retry=3 || return
   egrep pam_pwquality.so ${SYSTEM_AUTH} | egrep try_first_pass | egrep -q retry=3 || return
