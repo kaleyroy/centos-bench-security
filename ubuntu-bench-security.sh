@@ -9,7 +9,7 @@ if [[ "$1" == "--skip-slow" ]]; then
 fi
 
 . includes/log_utils.sh
-. includes/test_utils.sh
+. includes/test_utils_ubt.sh
 
 func_wrapper() {
   local func=$1
